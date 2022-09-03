@@ -1,0 +1,31 @@
+.catHeader {
+  background-image: url(../../assets/forSale.jpg);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 280px;
+  margin-bottom: 2%;
+  position: relative;
+}
+.catHeader h2 {
+  color: #3a3530;
+  font-weight: bold;
+  /* background-color: #3a3530; */
+  width: 20%;
+  position: absolute;
+  top: 50%;
+  left: 10%;
+  transform: translate(-10%, -50%);
+}
+.active {
+  background-color: #0a58ca !important;
+  color: #fff !important;
+  border-color: #0a58ca !important;
+}
+
+.carCard {
+  width: 100% !important;
+}
+.carCard img {
+  height: 200px !important;
+}
