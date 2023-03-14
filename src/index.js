@@ -7,18 +7,21 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "../node_modules/bootstrap/dist/js/bootstrap.bundle.min";
+import "react-loading-skeleton/dist/skeleton.css";
 
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./store";
+import ScrollToTop from "./components/scrollToTop";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   // <React.StrictMode>
-  <BrowserRouter>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </BrowserRouter>
+  // <BrowserRouter>
+  <Provider store={store}>
+    {/* <ScrollToTop /> */}
+    <App />
+  </Provider>
+  /* </BrowserRouter> */
   // </React.StrictMode>
 );
 

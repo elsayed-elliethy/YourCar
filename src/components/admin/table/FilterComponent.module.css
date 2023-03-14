@@ -1,0 +1,46 @@
+.filterInput {
+  border: none;
+  /* background: linear-gradient(35deg, #2fd6df, var(--mainColor)); */
+  /* background-color: #F6F7F9; */
+  background-color: var(--lightBackground);
+  font-size: 1.5rem;
+  padding: 0 15px;
+  color: var(--textColor);
+  outline: none;
+  border-radius: 1rem;
+  display: block;
+  width: 70% !important;
+  max-width: 100%;
+  /* margin: auto; */
+
+}
+.filterInput::placeholder {
+  text-align: left;
+}
+.addLink {
+  display: block;
+  width: 20%;
+  animation: pulse 1.5s;
+  transition: 0.3s;
+  
+}
+.addBtn {
+  width: 100%;
+  max-width: 100%;
+  font-size: 1.5rem;
+  padding: 0.5rem;
+  outline: none;
+  border: none;
+  border-radius: 1rem;
+  background-color: var(--mainColor);
+  color: var(--textColor);
+}
+
+@media (max-width:767px){
+  /* .filterInput {
+    width: 50%;
+  } */
+  .addLink {
+    width: 25%;
+  }
+}

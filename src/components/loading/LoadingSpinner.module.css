@@ -1,7 +1,13 @@
 .spinner {
-  display: inline-block;
+  /* display: inline-block; */
+  /* display: block; */
+  /* height: 80px; */
   width: 80px;
-  height: 80px;
+  height: 50vh;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .spinner:after {
   content: " ";

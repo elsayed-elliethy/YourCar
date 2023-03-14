@@ -36,3 +36,40 @@
     transform: rotate(360deg);
   }
 } */
+
+:root {
+  --mainColor: #ff4605;
+  --textColor: #1b2634;
+  --cardBackground: #222732;
+  --mainTransition: 0.3s;
+  --lightBackground: #E6E6E6;
+}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  min-height: 100vh !important;
+}
+.navbar-toggler {
+  /* color: #fff; */
+  background-color: #fff !important;
+}
+.imgCard {
+  border-radius: 15px !important;
+  overflow: hidden;
+  height: 100% !important;
+}
+.imgCard img {
+  backface-visibility: hidden;
+  transition: transform 0.5s ease-in-out;
+}
+.imgCard:hover img {
+  transform: scale(1.2);
+}
+
+input,
+textarea {
+  caret-color: var(--mainColor);
+}

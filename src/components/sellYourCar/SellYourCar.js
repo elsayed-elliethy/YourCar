@@ -1,47 +1,82 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import useHttp from "../../hook/use-http";
-import { storage, auth } from "../../firebaseConfig";
-import { useSelector } from "react-redux";
-import { onAuthStateChanged } from "firebase/auth";
-
-import { ref, uploadBytes, listAll, getDownloadURL } from "firebase/storage";
-import { getAuth } from "firebase/auth";
-import styles from "./sellYourCar.module.css";
-import { BsFillImageFill } from "react-icons/bs";
-import useInput2 from "../../hook/use-input";
+import { storage } from "../../firebaseConfig";
+import { ref, uploadBytesResumable } from "firebase/storage";
+import AdditionComponent from "../admin/additionComponent/additionComponent";
 import useInputFile from "../../hook/use-inputFIle";
-import LoadingSpinner from "../loading/LoadingSpinner";
-import LoadingIndicator from "../loading/LoadingIndicator";
-
+import useInput2 from "../../hook/use-input";
 ///valid consitions///
-
-const isEmpyt = (value) => {
+const isEmpty = (value) => {
   return value.trim().length !== 0;
 };
 const isNumber = (value) => {
-  return isNaN(value) === false && value.trim().length !== 0;
+  return isNaN(value) === false && value.length !== 0;
 };
 const isSelected = (value) => {
   return value !== "";
 };
 const isImages = (value) => {
-  return value.length === 3;
+  return value.length >= 3;
 };
-
 const SellYourCar = () => {
-  const token = useSelector((state) => {
-    return state.auth.token;
-  });
-
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  const uId = currentUser.id;
+  const { isLoading, error, requestFn } = useHttp();
+  /////getUserInfo///
+  const getUserApi = `https://cars-3a440-default-rtdb.firebaseio.com/users.json`;
+  const [userInfo, setUserInfo] = useState({});
+  useEffect(() => {
+    const transformData = (data) => {
+      Object.entries(data).map((ele) => {
+        if (ele[1].id === uId) {
+          setUserInfo(ele[1]);
+        }
+      });
+    };
+    requestFn(
+      {
+        url: getUserApi,
+      },
+      transformData
+    );
+  }, [requestFn, getUserApi, uId]);
+  /////getCategories///
+  const getCategories = `https://cars-3a440-default-rtdb.firebaseio.com/categories.json`;
+  const [categories, setCategories] = useState([]);
+  useEffect(() => {
+    const transformData = (data) => {
+      let loadedCategories = [];
+      Object.entries(data).map((ele) => {
+        if (ele[1].allowAds !== "No") {
+          loadedCategories.push(ele[1]);
+        }
+      });
+      setCategories(loadedCategories);
+    };
+    requestFn(
+      {
+        url: getCategories,
+      },
+      transformData
+    );
+  }, [requestFn, getCategories]);
   //////////form validation//////////
   const {
-    enteredvalue: enteredBrand,
-    inputValid: brandValid,
-    inputInvalid: brandInvalid,
-    inputChangeHandler: brandChangeHandler,
-    inputBlurHandler: brandBlurHandler,
-    reset: resetBrand,
-  } = useInput2(isEmpyt);
+    enteredvalue: enteredType,
+    inputValid: typeValid,
+    inputInvalid: typeInvalid,
+    selectChangeHandler: typeChangeHandler,
+    inputBlurHandler: typeBlurHandler,
+    reset: resetType,
+  } = useInput2(isSelected);
+  const {
+    enteredvalue: enteredMake,
+    inputValid: makeValid,
+    inputInvalid: makeInvalid,
+    selectChangeHandler: makeChangeHandler,
+    inputBlurHandler: makeBlurHandler,
+    reset: resetMake,
+  } = useInput2(isSelected);
   const {
     enteredvalue: enteredModel,
     inputValid: modelValid,
@@ -49,7 +84,7 @@ const SellYourCar = () => {
     inputChangeHandler: modelChangeHandler,
     inputBlurHandler: modelBlurHandler,
     reset: resetModel,
-  } = useInput2(isEmpyt);
+  } = useInput2(isEmpty);
   const {
     enteredvalue: enteredPrice,
     inputValid: priceValid,
@@ -57,29 +92,20 @@ const SellYourCar = () => {
     inputChangeHandler: priceChangeHandler,
     inputBlurHandler: priceBlurHandler,
     reset: resetPrice,
-    inputClasses: priceCalsses,
   } = useInput2(isNumber);
-  const {
-    enteredvalue: enteredCountry,
-    inputValid: countryValid,
-    inputInvalid: countryInvalid,
-    inputChangeHandler: countryChangeHandler,
-    inputBlurHandler: countryBlurHandler,
-    reset: resetCountry,
-  } = useInput2(isEmpyt);
   const {
     enteredvalue: enteredColor,
     inputValid: colorValid,
     inputInvalid: colorInvalid,
-    inputChangeHandler: colorChangeHandler,
+    selectChangeHandler: colorChangeHandler,
     inputBlurHandler: colorBlurHandler,
     reset: resetColor,
-  } = useInput2(isEmpyt);
+  } = useInput2(isSelected);
   const {
     enteredvalue: enteredStatus,
     inputValid: statusValid,
     inputInvalid: statusInvalid,
-    inputChangeHandler: statusChangeHandler,
+    selectChangeHandler: statusChangeHandler,
     inputBlurHandler: statusBlurHandler,
     reset: resetStatus,
   } = useInput2(isSelected);
@@ -87,148 +113,493 @@ const SellYourCar = () => {
     enteredvalue: enteredFuel,
     inputValid: fuelValid,
     inputInvalid: fuelInvalid,
-    inputChangeHandler: fuelChangeHandler,
+    selectChangeHandler: fuelChangeHandler,
     inputBlurHandler: fuelBlurHandler,
     reset: resetFuel,
-  } = useInput2(isSelected);
-  const {
-    enteredvalue: enteredGearbox,
-    inputValid: gearboxValid,
-    inputInvalid: gearboxInvalid,
-    inputChangeHandler: gearboxChangeHandler,
-    inputBlurHandler: gearboxBlurHandler,
-    reset: resetGearbox,
   } = useInput2(isSelected);
   const {
     enteredvalue: enteredCategory,
     inputValid: categoryValid,
     inputInvalid: categoryInvalid,
-    inputChangeHandler: categoryChangeHandler,
+    selectChangeHandler: categoryChangeHandler,
     inputBlurHandler: categoryBlurHandler,
     reset: resetCategory,
   } = useInput2(isSelected);
   const {
-    enteredvalue: enteredFirstRig,
-    inputValid: firstRigValid,
-    inputInvalid: firstRigInvalid,
-    inputChangeHandler: firstRigChangeHandler,
-    inputBlurHandler: firstRigBlurHandler,
-    reset: resetFirstRig,
+    enteredvalue: enteredYear,
+    inputValid: yearValid,
+    inputInvalid: yearInvalid,
+    selectChangeHandler: yearChangeHandler,
+    inputBlurHandler: yearBlurHandler,
+    reset: resetYear,
   } = useInput2(isSelected);
   const {
-    enteredImages: enteredImagesArray,
+    enteredvalue: enteredDriveType,
+    inputValid: driveTypeValid,
+    inputInvalid: driveTypeInvalid,
+    selectChangeHandler: driveTypeChangeHandler,
+    inputBlurHandler: driveTypeBlurHandler,
+    reset: resetDriveType,
+  } = useInput2(isSelected);
+  const {
+    enteredvalue: enteredTransmission,
+    inputValid: transmissionValid,
+    inputInvalid: transmissionInvalid,
+    selectChangeHandler: transmissionChangeHandler,
+    inputBlurHandler: transmissionBlurHandler,
+    reset: resetTransmission,
+  } = useInput2(isSelected);
+  const {
+    enteredvalue: enteredMileage,
+    inputValid: mileageValid,
+    inputInvalid: mileageInvalid,
+    inputChangeHandler: mileageChangeHandler,
+    inputBlurHandler: mileageBlurHandler,
+    reset: resetMileage,
+  } = useInput2(isNumber);
+  const {
+    enteredvalue: enteredDoors,
+    inputValid: doorsValid,
+    inputInvalid: doorsInvalid,
+    selectChangeHandler: doorsChangeHandler,
+    inputBlurHandler: doorsBlurHandler,
+    reset: resetDoors,
+  } = useInput2(isSelected);
+  const {
+    enteredvalue: enteredEngine,
+    inputValid: engineValid,
+    inputInvalid: engineInvalid,
+    inputChangeHandler: engineChangeHandler,
+    inputBlurHandler: engineBlurHandler,
+    reset: resetEngine,
+  } = useInput2(isNumber);
+  const {
+    enteredvalue: enteredCyilnders,
+    inputValid: cyilndersValid,
+    inputInvalid: cyilndersInvalid,
+    selectChangeHandler: cyilndersChangeHandler,
+    inputBlurHandler: cyilndersBlurHandler,
+    reset: resetCyilnders,
+  } = useInput2(isSelected);
+  const {
+    enteredvalue: enteredDesc,
+    inputValid: descValid,
+    inputInvalid: descInvalid,
+    inputChangeHandler: descChangeHandler,
+    inputBlurHandler: descBlurHandler,
+    reset: resetDescription,
+  } = useInput2(isEmpty);
+  const {
+    enteredvalue: enteredFeatures,
+    inputValid: featuresValid,
+    inputInvalid: featuresInvalid,
+    multiSelectChangeHandler: featuresChangeHandler,
+    inputBlurHandler: featuresBlurHandler,
+    reset: resetFeatures,
+  } = useInput2(isSelected);
+  const {
+    enteredvalue: enteredSafetyFeatures,
+    inputValid: safetyFeaturesValid,
+    inputInvalid: safetyFeaturesInvalid,
+    multiSelectChangeHandler: safetyFeaturesChangeHandler,
+    inputBlurHandler: safetyFeaturesBlurHandler,
+    reset: resetSafetyFeatures,
+  } = useInput2(isSelected);
+  const {
+    enteredImages,
     fileValid: imagesValid,
     fileInvalid: imagesInvalid,
     fileChangeHandler: imagesChangeHandler,
-    // fileBlurHandler: imagesBlurHandler,
     resetFile: resetImages,
   } = useInputFile(isImages);
 
   let formValid = false;
   if (
-    brandValid &&
+    typeValid &&
+    makeValid &&
     modelValid &&
-    priceValid &&
-    countryValid &&
-    colorValid &&
     statusValid &&
-    fuelValid &&
-    gearboxValid &&
     categoryValid &&
-    firstRigValid &&
+    priceValid &&
+    yearValid &&
+    driveTypeValid &&
+    transmissionValid &&
+    fuelValid &&
+    colorValid &&
+    doorsValid &&
+    mileageValid &&
+    engineValid &&
+    cyilndersValid &&
+    descValid &&
+    featuresValid &&
+    safetyFeaturesValid &&
     imagesValid
   ) {
     formValid = true;
   }
   ////////////////////
-  const apiKey = "AIzaSyDai1GcLEq1Gfe84Bz-atCmrCvKTc9pJK8";
-  const addCar = `https://cars-3a440-default-rtdb.firebaseio.com/cars.json`;
-  const userApi = `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${apiKey}`;
+  /////inputs///
+  const makeOptions = [
+    { value: "Audi", label: "Audi" },
+    { value: "Bentley", label: "Bentley" },
+    { value: "BMW", label: "BMW" },
+    { value: "Cadillac", label: "Cadillac" },
+    { value: "Chevrolet", label: "Chevrolet" },
+    { value: "Ferrari", label: "Ferrari" },
+    { value: "Ford", label: "Ford" },
+    { value: "Mercedes-Benz", label: "Mercedes-Benz" },
+    { value: "Porsche", label: "Porsche" },
+    { value: "Ford", label: "Ford" },
+  ];
+  const DriveTypeOptions = [
+    { value: "AWD/4WD", label: "AWD/4WD" },
+    { value: "Front Wheel Drive", label: "Front Wheel Drive" },
+    { value: "Rear Wheel Drive", label: "Rear Wheel Drive" },
+  ];
+  const statusOptions = [
+    { value: "New Vehicle", label: "New Vehicle" },
+    { value: "Used vehicle", label: "Used vehicle" },
+  ];
+  const FuelTypeOptions = [
+    { value: "Diesel", label: "Diesel" },
+    { value: "Electric", label: "Electric" },
+    { value: "Gas", label: "Gas" },
+    { value: "Petrol", label: "Petrol" },
+    { value: "Hybrid", label: "Hybrid" },
+  ];
+  const TransmissionOptions = [
+    { value: "Automatic", label: "Automatic" },
+    { value: "Manual", label: "Manual" },
+    { value: "Semi-Automatic", label: "Semi-Automatic" },
+  ];
+  const categoryOptions = categories.map((cat) => {
+    return { value: cat.name, label: cat.name };
+  });
+  const colorOptions = [
+    { value: "Black", label: "Black" },
+    { value: "Blue", label: "Blue" },
+    { value: "Brown", label: "Brown" },
+    { value: "Gold", label: "Gold" },
+    { value: "Green", label: "Green" },
+    { value: "Grey", label: "Grey" },
+    { value: "Orange", label: "Orange" },
+    { value: "Red", label: "Red" },
+    { value: "Silver", label: "Silver" },
+    { value: "White", label: "White" },
+    { value: "Yellow", label: "Yellow" },
+  ];
+  const doorsOptions = [
+    { value: "2-door", label: "2-door" },
+    { value: "3-door", label: "3-door" },
+    { value: "4-door", label: "4-door" },
+    { value: "5-door", label: "5-door" },
+  ];
+  const cylindersOptions = [
+    { value: "4", label: "4" },
+    { value: "6", label: "6" },
+    { value: "8", label: "8" },
+  ];
+  const typeOptions = [
+    { value: "Convertible", label: "Convertible" },
+    { value: "Coupe", label: "Coupe" },
+    { value: "Hatchback", label: "Hatchback" },
+    { value: "Sedan", label: "Sedan" },
+    { value: "SUV", label: "SUV" },
+    { value: "Wagon", label: "Wagon" },
+  ];
+  let yearOptions = [];
+  for (let i = 1990; i <= 2023; i++) {
+    yearOptions.push({ value: i, label: i });
+  }
+  const featuresOptions = [
+    { value: "360-degree camera", label: "360-degree camera" },
+    { value: "Blind spot alert", label: "Blind spot alert" },
+    { value: "Bluetooth", label: "Bluetooth" },
+    { value: "Cooled seats", label: "Cooled seats" },
+    { value: "Heated seats", label: "Heated seats" },
+    { value: "Leather seats", label: "Leather seats" },
+    { value: "LED headlights", label: "LED headlights" },
+    { value: "Memory seat", label: "Memory seat" },
+    { value: "Navigation System", label: "Navigation System" },
+    { value: "Reversing camera", label: "Reversing camera" },
+    { value: "Side airbags", label: "Side airbags" },
+    { value: "Sound system", label: "Sound system" },
+    { value: "Traction Control", label: "Traction Control" },
+    { value: "USB port", label: "USB port" },
+    { value: "Keyless start", label: "Keyless start" },
+  ];
 
-  const { isLoading, error, requestFn } = useHttp();
-  // const [imgArary, setImgArray] = useState([]);
-  let imgArary = [];
-  useEffect(() => {
-    if (enteredImagesArray.length !== 3) {
-      return;
-    }
-    if (enteredImagesArray.length === 3) {
-      Object.entries(enteredImagesArray).map((ele) => {
-        const imgName = Math.random(0, 1000000) + ele[1].name;
-        const imgRef = ref(storage, `images/${imgName}`);
-        uploadBytes(imgRef, ele[1]);
-        const imUrl = `https://firebasestorage.googleapis.com/v0/b/cars-3a440.appspot.com/o/images%2F${imgName}?alt=media`;
-        // setImgArray((prev) => {
-        //   return [...prev, imUrl];
-        // });
-        imgArary.push(imUrl);
-      });
-    }
-  }, [enteredImagesArray, imgArary]);
-
-  const [userData, setuserData] = useState({});
-  /////getUserData///
-  useEffect(() => {
-    const transformDataSignIn = (data) => {
-      const [userOpj] = data.users;
-      const loadedCars = [];
-      setuserData({
-        id: userOpj.localId,
-        name: userOpj.displayName,
-      });
-    };
-    requestFn(
-      {
-        url: userApi,
-        method: "POST",
-        body: { idToken: token },
-        headers: {
-          "Content-Type": "application/json",
-        },
-      },
-      transformDataSignIn
-    );
-  }, [requestFn, userApi, token]);
-
+  const safetyFeaturesOptions = [
+    { value: "Active head restraints", label: "Active head restraints" },
+    { value: "Adaptive headlights", label: "Adaptive headlights" },
+    { value: "Backup camera", label: "Backup camera" },
+    { value: "Blind-spot warning", label: "Blind-spot warning" },
+    { value: "Brake assist", label: "Brake assist" },
+    { value: "Forward-collision warning", label: "Forward-collision warning" },
+    { value: "Lane keeping assist", label: "Lane keeping assist" },
+    { value: "Parking assist systems", label: "Parking assist systems" },
+    { value: "Pedestrian detection", label: "Pedestrian detection" },
+    { value: "Sideview camera", label: "Sideview camera" },
+  ];
+  //
+  const listingsInputs = [
+    {
+      label: "Type",
+      type: "select",
+      options: typeOptions,
+      onChange: typeChangeHandler,
+      onBlur: typeBlurHandler,
+      value: enteredType,
+      valid: typeValid,
+      invalid: typeInvalid,
+    },
+    {
+      label: "Make",
+      type: "select",
+      options: makeOptions,
+      onChange: makeChangeHandler,
+      onBlur: makeBlurHandler,
+      value: enteredMake,
+      valid: makeValid,
+      invalid: makeInvalid,
+    },
+    {
+      label: "Model",
+      type: "text",
+      placeholder: "model",
+      onChange: modelChangeHandler,
+      onBlur: modelBlurHandler,
+      value: enteredModel,
+      valid: modelValid,
+      invalid: modelInvalid,
+    },
+    {
+      label: "Status",
+      type: "select",
+      options: statusOptions,
+      onChange: statusChangeHandler,
+      onBlur: statusBlurHandler,
+      value: enteredStatus,
+      valid: statusValid,
+      invalid: statusInvalid,
+    },
+    {
+      label: "Category",
+      type: "select",
+      options: categoryOptions,
+      onChange: categoryChangeHandler,
+      onBlur: categoryBlurHandler,
+      value: enteredCategory,
+      valid: categoryValid,
+      invalid: categoryInvalid,
+    },
+    {
+      label: "Price (USD)",
+      type: "number",
+      placeholder: "$",
+      onChange: priceChangeHandler,
+      onBlur: priceBlurHandler,
+      value: enteredPrice,
+      valid: priceValid,
+      invalid: priceInvalid,
+    },
+    {
+      label: "Year",
+      type: "select",
+      options: yearOptions,
+      onChange: yearChangeHandler,
+      onBlur: yearBlurHandler,
+      value: enteredYear,
+      valid: yearValid,
+      invalid: yearInvalid,
+    },
+    {
+      label: "Drive Type",
+      type: "select",
+      options: DriveTypeOptions,
+      onChange: driveTypeChangeHandler,
+      onBlur: driveTypeBlurHandler,
+      value: enteredDriveType,
+      valid: driveTypeValid,
+      invalid: driveTypeInvalid,
+    },
+    {
+      label: "Transmission",
+      type: "select",
+      options: TransmissionOptions,
+      onChange: transmissionChangeHandler,
+      onBlur: transmissionBlurHandler,
+      value: enteredTransmission,
+      valid: transmissionValid,
+      invalid: transmissionInvalid,
+    },
+    {
+      label: "Fuel Type",
+      type: "select",
+      options: FuelTypeOptions,
+      onChange: fuelChangeHandler,
+      onBlur: fuelBlurHandler,
+      value: enteredFuel,
+      valid: fuelValid,
+      invalid: fuelInvalid,
+    },
+    {
+      label: "Color",
+      type: "select",
+      options: colorOptions,
+      onChange: colorChangeHandler,
+      onBlur: colorBlurHandler,
+      value: enteredColor,
+      valid: colorValid,
+      invalid: colorInvalid,
+    },
+    {
+      label: "Doors",
+      type: "select",
+      options: doorsOptions,
+      onChange: doorsChangeHandler,
+      onBlur: doorsBlurHandler,
+      value: enteredDoors,
+      valid: doorsValid,
+      invalid: doorsInvalid,
+    },
+    {
+      label: "Mileage (mile)",
+      type: "number",
+      placeholder: "miles",
+      onChange: mileageChangeHandler,
+      onBlur: mileageBlurHandler,
+      value: enteredMileage,
+      valid: mileageValid,
+      invalid: mileageInvalid,
+    },
+    {
+      label: "Engine Size (L)",
+      type: "number",
+      placeholder: "L",
+      onChange: engineChangeHandler,
+      onBlur: engineBlurHandler,
+      value: enteredEngine,
+      valid: engineValid,
+      invalid: engineInvalid,
+    },
+    {
+      label: "Cylinders",
+      type: "select",
+      options: cylindersOptions,
+      onChange: cyilndersChangeHandler,
+      onBlur: cyilndersBlurHandler,
+      value: enteredCyilnders,
+      valid: cyilndersValid,
+      invalid: cyilndersInvalid,
+    },
+    {
+      label: "Description",
+      type: "textArea",
+      onChange: descChangeHandler,
+      onBlur: descBlurHandler,
+      value: enteredDesc,
+      valid: descValid,
+      invalid: descInvalid,
+    },
+    {
+      label: "Features",
+      type: "multiSelect",
+      options: featuresOptions,
+      onChange: featuresChangeHandler,
+      onBlur: featuresBlurHandler,
+      value: enteredFeatures,
+      valid: featuresValid,
+      invalid: featuresInvalid,
+    },
+    {
+      label: "Safety Features",
+      type: "multiSelect",
+      options: safetyFeaturesOptions,
+      onChange: safetyFeaturesChangeHandler,
+      onBlur: safetyFeaturesBlurHandler,
+      value: enteredSafetyFeatures,
+      valid: safetyFeaturesValid,
+      invalid: safetyFeaturesInvalid,
+    },
+    {
+      label: "Images",
+      type: "file",
+      onChange: imagesChangeHandler,
+      value: enteredImages,
+      valid: imagesValid,
+      invalid: imagesInvalid,
+    },
+  ];
+  /////////////
+  const randomId = Math.floor(Math.random() * 1000001).toString();
   let dateObj = new Date();
-  let newdate = `${dateObj.getUTCDate()}/${
+  let newDate = `${dateObj.getUTCDate()}/${
     dateObj.getUTCMonth() + 1
   }/${dateObj.getUTCFullYear()}`;
-
-  const [isSubmit, setIsSubmit] = useState(false);
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!formValid) {
-      return;
-    }
-
-    const transformData = (data) => {
-      setIsSubmit(true);
+  ////
+  const addListingHandler = () => {
+    let imgArray = [];
+    const [imagesInput] = listingsInputs.filter((ele) => ele.type === "file");
+    const enteredImagesArray = imagesInput.value;
+    Object.entries(enteredImagesArray).map((ele) => {
+      const imgName = Math.floor(Math.random() * 1000001) + ele[1].name;
+      const mainImgRef = ref(storage, `carImages/${randomId}/${imgName}`);
+      const imgRef = mainImgRef;
+      const uploadTask = uploadBytesResumable(imgRef, ele[1]);
+      let progress;
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log("Upload is " + progress + "% done");
+        },
+        (error) => {
+          // Handle unsuccessful uploads
+        },
+        () => {
+          // Handle successful uploads on complete
+        }
+      );
+      const mainImgUrl = `https://firebasestorage.googleapis.com/v0/b/cars-3a440.appspot.com/o/carImages%2F${randomId}%2F${imgName}?alt=media`;
+      imgArray.push(mainImgUrl);
+    });
+    ///
+    const addedCar = {
+      id: randomId,
+      addedDate: newDate,
+      approved: "not approved",
+      uId: uId,
+      uName: userInfo.name,
+      type: enteredType.value,
+      make: enteredMake.value,
+      model: enteredModel,
+      status: enteredStatus.value,
+      category: enteredCategory.value,
+      price: enteredPrice,
+      year: enteredYear.value,
+      driveType: enteredDriveType.value,
+      transmission: enteredTransmission.value,
+      fuelType: enteredFuel.value,
+      color: enteredColor.value,
+      doors: enteredDoors.value,
+      mileage: enteredMileage,
+      engine: enteredEngine,
+      cylinders: enteredCyilnders.value,
+      description: enteredDesc,
+      features: enteredFeatures ? enteredFeatures.map((ele) => ele.value) : [],
+      safetyFeatures: enteredSafetyFeatures
+        ? enteredSafetyFeatures.map((ele) => ele.value)
+        : [],
+      carImages: imgArray,
     };
+    ///////////////////
+    const transformData = (data) => {};
     requestFn(
       {
-        url: addCar,
-        method: "POST",
-        body: {
-          carData: {
-            carId: Math.random(),
-            addedDate: newdate,
-            approved: 0,
-            uName: userData.name,
-            uId: userData.id,
-            brand: enteredBrand,
-            model: enteredModel,
-            price: enteredPrice,
-            country: enteredCountry,
-            color: enteredColor,
-            status: enteredStatus,
-            fuel: enteredFuel,
-            gearbox: enteredGearbox,
-            category: enteredCategory,
-            firstRegisteration: enteredFirstRig,
-            carImages: imgArary,
-          },
-        },
+        url: `https://cars-3a440-default-rtdb.firebaseio.com/cars/${randomId}.json`,
+        method: "PUT",
+        body: addedCar,
         headers: {
           "Content-Type": "application/json",
         },
@@ -236,248 +607,40 @@ const SellYourCar = () => {
       transformData
     );
     /////////
-    resetBrand();
+    resetType();
+    resetMake();
     resetModel();
-    resetPrice();
-    resetCountry();
-    resetColor();
     resetStatus();
-    resetStatus();
-    resetFuel();
-    resetGearbox();
     resetCategory();
-    resetFirstRig();
+    resetPrice();
+    resetYear();
+    resetDriveType();
+    resetTransmission();
+    resetFuel();
+    resetColor();
+    resetDoors();
+    resetMileage();
+    resetEngine();
+    resetCyilnders();
+    resetDescription();
+    resetFeatures();
+    resetSafetyFeatures();
     resetImages();
   };
-
-  let years = [];
-  for (let i = 1990; i <= 2022; i++) {
-    years.push(i);
-  }
-  let content;
-  if (isLoading) {
-    // content = <p>Sending Request...</p>;
-    content = (
-      <div className="text-center">
-        <LoadingSpinner />
-      </div>
-    );
-  }
-  if (error) {
-    content = <p>{error}</p>;
-  }
-  if (!isLoading && !error && isSubmit) {
-    content = <p>Congratulations, your car has been added</p>;
-  }
-
+  ////
   return (
-    <Fragment>
-      <div className={styles.catHeader}>
-        <h2>
-          Get a cash offer or list your car - two free, secure, easy-to-use ways
-          to sell.
-        </h2>
-      </div>
-      <div className={styles.sell}>
-        {/* <LoadingSpinner />
-      <LoadingIndicator /> */}
-        <h1 className="text-center mb-5">Sell Your Car</h1>
-        <div className={`container text-center`}>
-          <form>
-            <input
-              type="text"
-              placeholder="brand"
-              name="brand"
-              className={brandInvalid ? styles.invalid : ""}
-              onChange={brandChangeHandler}
-              onBlur={brandBlurHandler}
-              value={enteredBrand}
-              required
-            />
-            <input
-              type="text"
-              placeholder="model"
-              name="model"
-              className={modelInvalid ? styles.invalid : ""}
-              onChange={modelChangeHandler}
-              onBlur={modelBlurHandler}
-              value={enteredModel}
-              required
-            />
-            <input
-              type="text"
-              placeholder="price"
-              name="price"
-              className={priceInvalid ? styles.invalid : ""}
-              onChange={priceChangeHandler}
-              onBlur={priceBlurHandler}
-              value={enteredPrice}
-              required
-            />
-            <input
-              type="text"
-              placeholder="country of made"
-              name="country"
-              className={countryInvalid ? styles.invalid : ""}
-              onChange={countryChangeHandler}
-              onBlur={countryBlurHandler}
-              value={enteredCountry}
-              required
-            />
-            <input
-              type="text"
-              placeholder="color"
-              name="color"
-              className={colorInvalid ? styles.invalid : ""}
-              onChange={colorChangeHandler}
-              onBlur={colorBlurHandler}
-              value={enteredColor}
-              required
-            />
-            <div
-              className={
-                statusInvalid
-                  ? `${styles.invalidSelect} ${styles.selectDiv}`
-                  : styles.selectDiv
-              }
-            >
-              <label>Status</label>
-              <select
-                name="status"
-                onChange={statusChangeHandler}
-                onBlur={statusBlurHandler}
-                value={enteredStatus}
-                required
-              >
-                <option value="...">...</option>
-                <option value="New Vehicle">New Vehicle</option>
-                <option value="Used vehicle">Used vehicle</option>
-              </select>
-            </div>
-            <div
-              className={
-                fuelInvalid
-                  ? `${styles.invalidSelect} ${styles.selectDiv}`
-                  : styles.selectDiv
-              }
-            >
-              <label>Fuel</label>
-              <select
-                name="fuel"
-                onChange={fuelChangeHandler}
-                onBlur={fuelBlurHandler}
-                value={enteredFuel}
-                required
-              >
-                <option value="...">...</option>
-                <option value="Diesel">Diesel</option>
-                <option value="Electric">Electric</option>
-                <option value="Gas">Gas</option>
-                <option value="Petrol">Petrol</option>
-              </select>
-            </div>
-            <div
-              className={
-                gearboxInvalid
-                  ? `${styles.invalidSelect} ${styles.selectDiv}`
-                  : styles.selectDiv
-              }
-            >
-              <label>Gearbox</label>
-              <select
-                name="gearbox"
-                onChange={gearboxChangeHandler}
-                onBlur={gearboxBlurHandler}
-                value={enteredGearbox}
-                required
-              >
-                <option value="...">...</option>
-                <option value="Automatic">Automatic</option>
-                <option value="Manual">Manual</option>
-                <option value="Semi-Automatic">Semi-Automatic</option>
-              </select>
-            </div>
-            <div
-              className={
-                categoryInvalid
-                  ? `${styles.invalidSelect} ${styles.selectDiv}`
-                  : styles.selectDiv
-              }
-            >
-              <label>Category</label>
-              <select
-                name="category"
-                onChange={categoryChangeHandler}
-                onBlur={categoryBlurHandler}
-                value={enteredCategory}
-                required
-              >
-                <option value="...">...</option>
-                <option value="New Cars">New Cars</option>
-                <option value="Used Cars">Used Cars</option>
-                <option value="For Rent">For Rent</option>
-              </select>
-            </div>
-            <div
-              className={
-                firstRigInvalid
-                  ? `${styles.invalidSelect} ${styles.selectDiv}`
-                  : styles.selectDiv
-              }
-            >
-              <label>First Registeration</label>
-              <select
-                name="firstRegistiration"
-                onChange={firstRigChangeHandler}
-                onBlur={firstRigBlurHandler}
-                value={enteredFirstRig}
-                required
-              >
-                <option value="...">...</option>
-                {years.map((year) => {
-                  return (
-                    <option key={year} value={year}>
-                      {year}
-                    </option>
-                  );
-                })}
-              </select>
-              {/* <input type="number" min="2000" max="2022" /> */}
-            </div>
-
-            <div>
-              <input
-                type="file"
-                placeholder="img"
-                name="img"
-                id="firstImg"
-                multiple
-                onChange={imagesChangeHandler}
-                files={enteredImagesArray}
-                className="d-none"
-              />
-              <label
-                htmlFor="firstImg"
-                className={
-                  imagesInvalid
-                    ? `${styles.invalidImages} ${styles.imgLabel}`
-                    : styles.imgLabel
-                }
-              >
-                <BsFillImageFill />
-                choose 3 images from deferent sides
-              </label>
-            </div>
-
-            <button onClick={handleSubmit} disabled={!formValid}>
-              Add Car
-            </button>
-          </form>
-          {content}
-        </div>
-      </div>
-    </Fragment>
+    <>
+      <AdditionComponent
+        title={"Sell Your Car"}
+        inputs={listingsInputs}
+        formValidation={formValid}
+        addHandler={addListingHandler}
+        isLoading={isLoading}
+        error={error}
+      />
+    </>
   );
 };
 
 export default SellYourCar;
+/////////////

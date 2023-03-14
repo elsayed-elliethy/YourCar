@@ -1,40 +1,56 @@
-import React, { Component } from "react";
 import { configureStore, createSlice } from "@reduxjs/toolkit";
-
-//////////
-const inetialToken = localStorage.getItem("token");
-const inetialExpirationTime = localStorage.getItem("expirationTime");
-const inetialLogin = inetialToken && inetialExpirationTime ? true : false;
-const authSlice = createSlice({
-  name: "auth",
+const manageFavoritesSlice = createSlice({
+  name: "manageFavorites",
   initialState: {
-    token: inetialToken,
-    isloggedIn: inetialLogin,
-    expirationTime: inetialExpirationTime,
+    items: [],
+    totalAmount: 0,
   },
   reducers: {
-    login(state, action) {
-      state.token = action.payload.tok;
-      state.expirationTime = action.payload.expir;
-      state.isloggedIn = true;
+    replaceFavorites(state,action){
+      state.totalAmount = action.payload.totalAmount
+      state.items = action.payload.items
     },
-    logout(state, action) {
-      state.token = "";
-      state.expirationTime = "";
-      state.isloggedIn = false;
+    manageFavorites(state, action) {
+      const newItem = action.payload;
+      const existingItem = [...state.items].find((item) => item.id === newItem.id);
+      let updatedArray;
+      if (existingItem) {
+        updatedArray = [...state.items].filter(item=>item !== existingItem)
+        state.items = updatedArray;
+        state.totalAmount = +state.totalAmount - 1;
+      } else {
+        state.items = [...state.items, newItem];
+        state.totalAmount = +state.totalAmount + 1;
+      }
     },
+    
   },
 });
 
-////////
+// ////////
+// const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+// export const sendFavoritesData = (favorites)=>{
+//   return async(dispatch) => {
+//     dispatch()
 
-/////////
-
+//     const sendRequest = async ()=>{
+//     const response =  await fetch(`https://cars-3a440-default-rtdb.firebaseio.com/users/${currentUser.id}/favorites.json`,{
+//        method: "PUT",
+//        body: JSON.stringify(favorites),
+//      headers: {
+//        "Content-Type": "application/json",
+//      },
+//      })
+//      return response
+//     }
+//     await sendRequest()
+//   }
+// }
+// ///////
 const store = configureStore({
   reducer: {
-    auth: authSlice.reducer,
+    manageFavorites: manageFavoritesSlice.reducer,
   },
 });
-export const authActions = authSlice.actions;
-
+export const favoritesActions = manageFavoritesSlice.actions;
 export default store;

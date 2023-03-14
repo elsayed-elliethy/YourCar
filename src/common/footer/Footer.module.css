@@ -1,0 +1,58 @@
+footer {
+  padding: 50px 0;
+  background-color: var(--cardBackground);
+  color: #fff;
+}
+footer .logo {
+  font-weight: bold;
+  font-size: 25px;
+}
+footer .logo img {
+  height: 32px;
+}
+footer a {
+  color: #fff !important;
+}
+footer .award {
+  margin-top: 0;
+  line-height: 2;
+  width: 80%;
+}
+footer span {
+  color: var(--mainColor);
+}
+footer .phone {
+  font-weight: bold;
+  font-size: 30px;
+}
+
+footer ul li {
+  color: var(--mainColor);
+}
+
+.copyright ul {
+  text-align: center;
+  width: 50%;
+  align-items: center;
+  justify-content: center !important;
+  margin: auto;
+}
+.copyright ul li a {
+  display: block;
+}
+.copyright ul li {
+  width: 50px;
+  height: 50px;
+  background-color: #3b4250 !important;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center !important;
+  align-items: center;
+}
+.copyright ul li svg {
+  width: 30px !important;
+  height: 30px !important;
+}
+.copyright ul li svg:hover {
+  color: var(--mainColor) !important;
+}

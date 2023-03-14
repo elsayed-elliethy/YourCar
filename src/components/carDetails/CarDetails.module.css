@@ -1,7 +1,195 @@
+.carsDetails {
+  padding: 50px 0 0;
+}
+.firstRow {
+}
 .mainImage {
   width: 100%;
+  border-radius: 15px;
+  overflow: hidden;
+  border: 1px solid #444;
+  position: relative;
 }
 .mainImage img {
   max-width: 100%;
-  height: 80%;
+  height: 450px !important;
+  max-height: 100%;
+}
+.mainImage span {
+  fill: var(--mainColor) !important;
+}
+.slideNumber {
+  position: absolute;
+  display: block;
+  bottom: 5%;
+  right: 5%;
+  color: #fff;
+  font-weight: bold;
+  z-index: 20;
+}
+.slideNumber svg {
+  opacity: 0.5;
+  font-size: 25px;
+}
+.images {
+  width: 100%;
+  height: 200px;
+  /* display: flex; */
+}
+.mySplide .card {
+  border-radius: 15px !important;
+  overflow: hidden;
+  opacity: 0.5;
+}
+.images img {
+  width: 100%;
+  max-height: 100%;
+}
+.active {
+  opacity: 1 !important;
+  border: 2px solid red;
+}
+.desc {
+  background-color: #444;
+  color: #fff;
+  text-align: center;
+  outline: 1px solid #444;
+}
+.carInfo li {
+  padding: 7px 10px;
+}
+.carInfo li:nth-child(odd) {
+  background-color: #eff3fa;
+}
+.carInfo li {
+  color: var(--mainColor) !important;
+}
+.carInfo li span {
+  color: var(--textColor) !important;
+}
+.btn {
+  width: 50%;
+  background-color: #e4e4e4;
+  border: none;
+  padding: 10px;
+}
+/* start description */
+.description p {
+  line-height: 1.6;
+  color: var(--textColor);
+}
+/* ////////// */
+/* start features */
+.features ul li span {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background-color: var(--mainColor);
+}
+.safetyFeatures ul li svg {
+  fill: var(--mainColor);
+  font-size: 20px;
+}
+/* /////////// */
+/* start contact seller */
+.contactSeller {
+  width: 100%;
+}
+.contactSeller input {
+  width: 32%;
+  padding: 15px 10px;
+  border: none;
+  border-radius: 1rem;
+}
+.contactSeller input::placeholder {
+  text-align: left;
+}
+.contactSeller input:focus {
+  border: none;
+  outline: none;
+}
+.contactSeller .selectDiv {
+  width: 100%;
+  padding: 15px 10px;
+  border: none;
+  border-radius: 1rem;
+  background-color: #fff;
+  margin: 10px 0;
+}
+.contactSeller .selectDiv label {
+  color: #8b7575;
+  margin-bottom: 5px;
+}
+.contactSeller .selectDiv select {
+  width: 100%;
+  border: none;
+  border-radius: 1rem;
+  height: 100%;
+}
+.contactSeller .selectDiv textarea {
+  width: 100%;
+  border: none;
+  height: 150px;
+}
+.contactSeller .selectDiv select:focus,
+.contactSeller .selectDiv textarea:focus {
+  border: none;
+  outline: none;
+}
+.contactSeller form button {
+  display: block;
+  width: 25%;
+  margin-left: 75%;
+  padding: 10px 0;
+  text-align: center;
+  background-color: var(--mainColor);
+  color: #fff;
+  border: none;
+  border-radius: 1rem;
+}
+.sellerInfo {
+  width: 100%;
+  background-color: #fff;
+  border: none;
+  border-radius: 15px;
+  height: 100%;
+}
+.sellerInfo .role {
+  color: var(--mainColor);
+  text-align: center;
+  font-size: 17px;
+}
+.sellerInfo svg {
+  fill: var(--mainColor);
+}
+@media (max-width: 767px) {
+  .contactSeller input:not(:last-child) {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  .contactSeller input:last-child {
+    width: 100%;
+  }
+}
+.carousel-indicators {
+  text-align: left !important;
+  left: inherit;
+  width: 15px;
+  top: 47%;
+  position: absolute;
+  left: 2%;
+  margin-left: 0;
+}
+.price {
+  color: var(--mainColor);
+  font-size: 30px;
+  font-weight: bold;
+}
+.contact {
+  padding: 100px 0;
+  background-color: #f2f5fb;
+}
+.contact form p {
+  background-color: rgb(28, 147, 202);
+  color: #fff;
 }

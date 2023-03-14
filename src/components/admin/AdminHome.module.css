@@ -1,0 +1,85 @@
+.mainDev {
+  background-color: #f9f9fb !important;
+}
+.mainDev .childDiv {
+  background-color: #fff !important;
+  padding: 10px;
+  box-shadow: 0 0 20px rgb(115 105 215 / 15%);
+}
+.mainDev .childDiv .colHeader {
+  border-bottom: 2px solid #ebedf2;
+  padding: 1.25rem;
+}
+.mainDev .childDiv svg {
+  fill: var(--mainColor);
+}
+.carsNum div {
+  color: var(--textColor);
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  padding: 10px 0;
+  width: 32%;
+  padding: 10px 5px;
+  text-align: center;
+}
+.carsNum span {
+  width: fit-content;
+  display: block;
+  font-size: 20px;
+  font-weight: bold;
+}
+.carsNum div:first-child span {
+  color: var(--mainColor);
+}
+.carsNum div:nth-child(2) span {
+  color: rgba(34, 39, 50);
+}
+.carsNum div:last-child span {
+  color: rgba(43, 203, 186);
+}
+
+.makes .prog-holder {
+  margin-bottom: 20px;
+  
+}
+.makes .prog-holder h4 {
+  margin-bottom: 10px;
+  font-weight: normal;
+  text-transform: uppercase;
+}
+.makes .prog-holder .prog {
+  background-color: #dedadc;
+  height: 24px;
+  position: relative;
+  border-radius: 5px;
+  
+  
+}
+.makes .prog-holder .prog span {
+  display: block;
+  background-color: var(--mainColor);
+  height: 100%;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+.makes .prog-holder .prog span::before {
+  content: attr(data-progress) "%";
+  position: absolute;
+  background-color: var(--textColor);
+  color: white;
+  top: -40px;
+  right: 0;
+  padding: 4px 0;
+  width: 40px;
+  text-align: center;
+  border-radius: 4px;
+}
+.makes .prog-holder .prog span::after {
+  content: "";
+  position: absolute;
+  border-style: solid;
+  border-width: 8px;
+  border-color: var(--textColor) transparent transparent;
+  right: 10px;
+  top: -8px;
+}

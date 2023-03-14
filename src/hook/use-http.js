@@ -3,11 +3,9 @@ import React, { Component, useCallback, useState } from "react";
 const useHttp = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-
   const closeErrorHandler = () => {
     setError(null);
   };
-
   const requestFn = useCallback(async (configReq, applyData = (data) => {}) => {
     setIsLoading(true);
     setError(null);

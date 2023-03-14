@@ -1,133 +1,95 @@
-.sell {
-  padding: 50px;
-}
-.catHeader {
-  background-image: url(../../assets/homeImages/sell.jpg);
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-
-  width: 100%;
-  height: 280px;
-  margin-bottom: 2%;
-  position: relative;
-}
-.catHeader h2 {
-  color: #3a3530;
-  font-weight: bold;
-  /* background-color: #3a3530; */
-  width: 30%;
-  position: absolute;
-  top: 50%;
-  right: 2%;
-  transform: translate(-10%, -50%);
+/* .sell {
+  padding: 50px 0;
 }
 .sell form {
-  width: 70%;
   margin: auto;
+  background-color: #f2f5fb;
+  padding: 20px;
+  border-radius: 15px;
 }
 .sell input {
   display: block !important;
-  margin: 15px auto;
+  margin: 10px 0;
   width: 100%;
   max-width: 100%;
-  /* background: linear-gradient(35deg, #2fd6df, #555); */
   font-size: 1.5rem;
   padding: 0.5rem 1rem;
-  /* color: #fff; */
   outline: none;
   border: 1px solid #444;
   border-radius: 1rem;
 }
 .sell .selectDiv {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  width: 100% !important;
+  text-align: left;
 }
-.sell .selectDiv label {
-  width: 10% !important;
+.sell label {
   font-size: 1.5rem;
   color: #444;
+  text-align: left !important;
 }
-
 .sell select {
-  /* display: block !important; */
   margin: 15px 0;
   width: 75%;
   max-width: 100%;
-  /* background: linear-gradient(35deg, #2fd6df, #555); */
   font-size: 1.5rem;
   padding: 0.5rem 1rem;
-  /* color: #fff; */
   outline: none;
   border: 1px solid #444;
   border-radius: 1rem;
 }
-
 .sell input[type="file"] {
   display: none !important;
 }
-
 .imgLabel {
-  /* display: inline; */
   margin: 15px auto;
   width: 100%;
   max-width: 100%;
-  /* background: linear-gradient(35deg, #2fd6df, #555); */
   font-size: 1.5rem;
   padding: 0.5rem 1rem;
-  /* color: #fff; */
   outline: none;
   border: 1px solid #444;
   border-radius: 1rem;
   text-align: left;
 }
-
 .imgLabel svg {
   width: 50px !important;
-  /* fill: red; */
 }
-
 .sell button {
   display: block !important;
   margin: 15px auto;
   width: 25%;
   max-width: 100%;
-  /* background: linear-gradient(35deg, #2fd6df, #555); */
   font-size: 1.5rem;
   padding: 0.5rem 1rem;
-  /* color: #fff; */
   outline: none;
   border: 1px solid #444;
   border-radius: 1rem;
+  background-color: var(--mainColor);
+  color: #fff;
 }
-
 .invalid label {
-  color: #ca3e51;
+  color: #ca3e51 !important;
 }
-
-.invalid {
+.invalid input {
   border-color: #aa0b20 !important;
   background-color: #ffeff1;
 }
-.invalidSelect select {
+.invalidSelect .select,
+.invalidSelect input,
+.invalidSelect textarea {
   border-color: #aa0b20 !important;
   background-color: #ffeff1;
 }
 .invalidSelect label {
   color: #ca3e51 !important;
 }
-
 .invalid input:focus {
   border-color: #ff8800;
   background-color: #fbe8d2;
 }
-
 .error-text {
   color: #b40e0e;
 }
-
 button:disabled,
 button:disabled:hover,
 button:disabled:active {
@@ -136,8 +98,60 @@ button:disabled:active {
   border-color: #ccc !important;
   cursor: not-allowed !important;
 }
-
 .invalidImages {
   border-color: #aa0b20 !important;
   background-color: #ffeff1;
 }
+.select {
+  display: block;
+  margin: 10px 0;
+  width: 100%;
+  max-width: 100%;
+  font-size: 1.5rem;
+  outline: none;
+  border: 1px solid #444 !important;
+  border-radius: 1rem !important;
+  background-color: #fff;
+}
+.sell textarea {
+  width: 100%;
+  height: 100px;
+  outline: none;
+  border: 1px solid #444 !important;
+  border-radius: 1rem !important;
+  resize: none;
+}
+.imagesDiv label {
+  width: 100%;
+  height: 100px;
+  line-height: 3;
+}
+.slectColor {
+  color: #aa0b20 !important;
+}
+.addingsuccess {
+  color: var(--cardBackground);
+  text-align: center;
+  padding: 20px 0;
+  background-color: rgb(38, 134, 237);
+  margin: 100px 0;
+}
+input::placeholder {
+  text-align: right;
+}
+@media (max-width: 992px) {
+  .sell button {
+    width: 30%;
+  }
+}
+@media (max-width: 767px) {
+  .sell button {
+    width: 80%;
+  }
+}
+.spinnerDiv {
+  height: 50vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+} */

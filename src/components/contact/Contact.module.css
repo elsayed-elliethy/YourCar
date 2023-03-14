@@ -1,0 +1,80 @@
+.contact {
+  padding: 50px 0;
+}
+.contact1 h1 {
+  color: var(--teatColor);
+}
+.contact1 p,
+.contact1 address {
+  color: var(--teatColor);
+  font-size: 16px;
+  line-height: 1.6;
+}
+.contact1 svg,
+.contact1 span {
+  color: var(--mainColor);
+}
+/* start contact */
+.contact2 {
+  width: 100%;
+  background-color: #eff3fa;
+  /* background-color: #f9f9fb; */
+  padding: 20px;
+  border-radius: 15px;
+}
+.contact2 input {
+  width: 30%;
+  padding: 15px 10px;
+  border: 1px solid #ccc;
+  border-radius: 1rem;
+}
+.contact2 input::placeholder {
+  text-align: left;
+}
+.contact2 input:focus {
+  /* border: none; */
+  outline: none;
+}
+.contact2 .selectDiv {
+  width: 100%;
+  padding: 15px 10px;
+  /* border: none; */
+  border: 1px solid #ccc;
+  border-radius: 1rem;
+  background-color: #fff;
+}
+.contact2 .selectDiv label {
+  color: #8b7575;
+  margin-bottom: 5px;
+}
+.contact2 .selectDiv select {
+  width: 100%;
+  border: none;
+  border-radius: 1rem;
+  height: 100%;
+}
+.contact2 .selectDiv textarea {
+  width: 100%;
+  border: none;
+  height: 150px;
+}
+.contact2 .selectDiv select:focus,
+.contact2 .selectDiv textarea:focus {
+  border: none;
+  outline: none;
+}
+.contact2 form button {
+  display: block;
+  width: 25%;
+  margin-left: 75%;
+  padding: 10px 0;
+  text-align: center;
+  background-color: var(--mainColor);
+  color: #fff;
+  border: none;
+  border-radius: 1rem;
+}
+.contact2 form p {
+  background-color: rgb(28, 147, 202);
+  color: #fff;
+}

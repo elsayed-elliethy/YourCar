@@ -1,3 +1,4 @@
+/*
 .slider {
   height: 70vh;
   position: relative;
@@ -58,4 +59,126 @@
     font-weight: 500;
     font-size: medium;
   }
+}
+*/
+/* //////// */
+
+.header {
+  top: 0 !important;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  /* background-image: url("../../assets/homeImages/vehica-video-poster.jpg");
+  background-size: cover;
+  background-position: center; */
+}
+.header video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  object-fit: cover;
+  z-index: -10;
+}
+.header .content {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  z-index: 2;
+  width: 60%;
+  text-align: center;
+  height: auto;
+}
+.header .content h1 {
+  font-size: 61px;
+  line-height: 62px;
+}
+.header .content h1 span {
+  color: var(--mainColor);
+}
+
+/*  */
+.searchContainer {
+  width: 100%;
+  background: #fff;
+  border-radius: 20px;
+  padding: 16px 22px 17px;
+  box-shadow: 0 3px 6px 0 rgb(0 0 0 / 16%);
+}
+.select {
+  display: block;
+  /* margin: 10px 0; */
+  width: 43%;
+  max-width: 100%;
+  font-size: 1.5rem;
+  outline: none;
+  border: 1px solid #444 !important;
+  border-radius: 10px !important;
+  /* overflow: hidden; */
+}
+
+.iconDiv {
+  background-color: var(--mainColor);
+  width: 10%;
+  position: relative;
+  padding: 0.1rem 0;
+  border: 1px solid var(--mainColor);
+
+  border-radius: 10px !important;
+}
+.iconDiv div {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@media (max-width: 991px) {
+  .header .content {
+    width: 75%;
+  }
+  .header .content h1 {
+    font-size: 50px;
+    line-height: 62px;
+  }
+  .select {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  .iconDiv {
+    width: 100%;
+    height: 50px;
+    margin: auto;
+  }
+}
+@media (max-width: 767px) {
+  .header .content {
+    width: 90%;
+  }
+  .header .content h1 {
+    font-size: 35px;
+    line-height: 62px;
+  }
+}
+/* /// */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-2rem);
+    visibility: hidden;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+  }
+}
+
+.menu {
+  animation: fadeIn 0.3s ease-in-out;
 }
