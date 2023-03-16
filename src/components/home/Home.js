@@ -557,8 +557,8 @@ const Home = () => {
       <div className={`py-5 ${styles.chooseSection}`}>
         <h2 className="text-center py-5">Why choose us?</h2>
         <Container>
-            <Row className="text-center justify-content-center overflow-hidden">
-               <Col md={6} lg={4} className={`mt-3 mt-md-0 ${chooseUsItemClass}`} ref={chooseUsRef} >
+            <Row className="text-center justify-content-center overflow-hidden" ref={chooseUsRef}>
+               <Col md={6} lg={4} className={`mt-3 mt-md-0 ${chooseUsItemClass}`}>
                 <div className={`mb-3 ${styles.icon}`}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -605,7 +605,7 @@ const Home = () => {
                   of your credit history.
                 </p>
                 </Col>
-              <Col md={6} lg={4} className={`mt-3 mt-md-0 ${chooseUsItemClass}`} ref={chooseUsRef}>
+              <Col md={6} lg={4} className={`mt-3 mt-md-0 ${chooseUsItemClass}`}>
                 <div className={`mb-3 ${styles.icon}`}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -673,7 +673,7 @@ const Home = () => {
                   of your credit history.
                 </p>
               </Col>
-              <Col md={6} lg={4} className={`mt-3 mt-md-0 ${chooseUsItemClass}`} ref={chooseUsRef}>
+              <Col md={6} lg={4} className={`mt-3 mt-md-0 ${chooseUsItemClass}`}>
                 <div className={`mb-3 ${styles.icon}`}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -847,8 +847,8 @@ const Home = () => {
       )}
       <div className={`pt-5 pb-3 ${styles.howSection}`}>
         <Container>
-          <Row className="overflow-hidden">
-            <Col lg={6} ref={howTOBuyRef} className={howToBuyItemClass}>
+          <Row className="overflow-hidden" ref={howTOBuyRef}>
+            <Col lg={6}  className={howToBuyItemClass}>
               <div className={`d-flex ${styles.downloadCard}`}>
                 <div className={styles.firstDiv}>
                   <h2>Download our app</h2>
@@ -868,7 +868,7 @@ const Home = () => {
                 </div>
               </div>
             </Col>
-            <Col lg={6} className={howToBuyItemClass} ref={howTOBuyRef}>
+            <Col lg={6} className={howToBuyItemClass}>
               <div className={`d-flex ${styles.howCard} py-5`}>
                 <div className={styles.firstDiv}>
                   <h2>How to buy a car?</h2>

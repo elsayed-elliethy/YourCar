@@ -65,8 +65,8 @@ const About = () => {
 
       <div className={styles.ceo}>
         <Container className="">
-          <Row className={`${styles.ceoRow}`}>
-            <Col lg={6} className={`mh-100 h-100  mb-lg-0 ${ceoItemClass}`} ref={ceoRef}>
+          <Row className={`${styles.ceoRow}`} ref={ceoRef}>
+            <Col lg={6} className={`mh-100 h-100  mb-lg-0 ${ceoItemClass}`} >
               <div
                 className={`w-100 mw-100  d-flex justify-content-between align-items-center flex-column ${styles.ceo1} `}
               >
@@ -82,11 +82,11 @@ const About = () => {
                 </div>
               </div>
             </Col>
-            <Col lg={6} className={`mt-3 mt-lg-0 ${ceoItemClass}`} ref={ceoRef}>
+            <Col lg={6} className={`mt-3 mt-lg-0 ${ceoItemClass}`} >
               <div className={`${styles.ceo2} w-100`}></div>
             </Col>
           </Row>
-          <div className={`${styles.testDrive} w-50 ${ceoItemClass}`} ref={ceoRef}>
+          <div className={`${styles.testDrive} w-50 ${ceoItemClass}`}>
             <p className="text-center">Book a Test Drive!</p>
             <NavLink to={"/contactUs"} className="">
               <button className="btn mx-auto text-center d-block">
