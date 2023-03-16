@@ -41,6 +41,12 @@ function App() {
 /////getUserInfo///
 const { isLoading, error, requestFn } = useHttp();
   const currentUser = JSON.parse(localStorage.getItem("currentUser"))
+  if(!currentUser){
+    localStorage.setItem(
+      "currentUser",
+      JSON.stringify({ token: "", id: "", expirationTime: -1 })
+    );
+  }
 const dispatch = useDispatch()
 const getUserApi = `https://cars-3a440-default-rtdb.firebaseio.com/users.json`;
 const [userInfo, setUserInfo] = useState({});
