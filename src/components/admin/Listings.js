@@ -175,6 +175,8 @@ const Listings = () => {
     );
   };
   const deleteListingHandler = (carId) => {
+    const proceed = window.confirm("Are you sure?");
+    if (proceed) {
     const updatedList = cars.filter((ele) => {
       return ele.id !== carId;
     });
@@ -190,6 +192,7 @@ const Listings = () => {
         deleteObject(item);
       });
     });
+  }
   };
   ////
   return (

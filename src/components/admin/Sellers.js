@@ -119,10 +119,8 @@ const Users = () => {
     );
   };
   const deleteUsersHandler = (uId) => {
-    console.log(uId);
-    const [targetUser] = users.filter((ele) => {
-      return ele.id === uId;
-    });
+    const proceed = window.confirm("Are you sure?");
+    if (proceed) {
     const updatedList = users.filter((ele) => {
       return ele.id !== uId;
     });
@@ -131,6 +129,7 @@ const Users = () => {
       url: `https://cars-3a440-default-rtdb.firebaseio.com/users/${uId}.json`,
       method: "DELETE",
     });
+  }
     // fetch(
     //   `https://identitytoolkit.googleapis.com/v1/accounts:delete?key=AIzaSyDai1GcLEq1Gfe84Bz-atCmrCvKTc9pJK8`,
     //   {

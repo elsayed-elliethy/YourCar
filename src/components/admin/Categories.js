@@ -117,14 +117,17 @@ const Categories = () => {
     );
   };
   const deleteCategoryHandler = (catId) => {
-    const updatedList = categories.filter((ele) => {
-      return ele.id !== catId;
-    });
-    setCategories(updatedList);
-    requestFn({
-      url: `https://cars-3a440-default-rtdb.firebaseio.com/categories/${catId}.json`,
-      method: "DELETE",
-    });
+    const proceed = window.confirm("Are you sure?");
+    if (proceed) {
+      const updatedList = categories.filter((ele) => {
+        return ele.id !== catId;
+      });
+      setCategories(updatedList);
+      requestFn({
+        url: `https://cars-3a440-default-rtdb.firebaseio.com/categories/${catId}.json`,
+        method: "DELETE",
+      });
+    }
   };
   const approveListingsHandler = (id) => {};
   return (
