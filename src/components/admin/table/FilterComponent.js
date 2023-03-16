@@ -21,13 +21,7 @@ const FilterComponent = ({ filter, setFilter, placeholder,btnContent,link }) => 
           {btnContent}
         </button>
       </NavLink>
-        <NavLink to={"/adminDashboard/categories/addCategory"} className={`${styles.addLink} d-lg-none`}>
-        <button 
-        className={`d-block ${styles.addBtn}`}
-        >
-          Add
-        </button>
-      </NavLink>
+     
       </div>
     </Container>
   );
